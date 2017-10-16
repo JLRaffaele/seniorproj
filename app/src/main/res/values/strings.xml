@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PlayerLocator</string>
+    <string name="Intro">Welcome to Player Locator</string>
+    <string name="Second">Second page</string>
+</resources>
