@@ -1,3 +1,4 @@
+/*
 package utils;
 
 import com.android.volley.toolbox.ImageLoader.ImageCache;
@@ -7,7 +8,7 @@ import android.support.v4.util.LruCache;
 
 /**
  * Created by Jean-Luc on 10/31/2017.
- */
+
 
 public class LruBitmapCache extends LruCache<String, Bitmap> implements ImageCache
     {
@@ -46,3 +47,4 @@ public class LruBitmapCache extends LruCache<String, Bitmap> implements ImageCac
         put(url, bitmap);
     }
     }
+*/

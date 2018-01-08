@@ -20,6 +20,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"/>
+
+            <ProgressBar
+                android:id="@+id/pbbar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="57dp"
+                android:layout_weight="0.75" />
             <!-- Logo Ends -->
         </LinearLayout>
 
@@ -44,21 +51,25 @@
             android:padding="10dip"
             android:layout_below="@id/header">
             <!--  Email Label -->
-            <TextView android:layout_width="fill_parent"
+            <TextView android:id="@+id/usernameText"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
                 android:text="Username"/>
-            <EditText android:layout_width="fill_parent"
+            <EditText android:id="@+id/edtuserid"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:layout_marginBottom="20dip"
                 android:singleLine="true"/>
             <!--  Password Label -->
-            <TextView android:layout_width="fill_parent"
+            <TextView android:id="@+id/passwordText"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
                 android:text="Password"/>
-            <EditText android:layout_width="fill_parent"
+            <EditText android:id="@+id/edtpass"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:singleLine="true"
