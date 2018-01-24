@@ -11,6 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
     }
     buildTypes {
         release {
@@ -32,5 +33,6 @@ dependencies {
     compile 'com.android.support:support-vector-drawable:26.+'
     compile 'com.android.support:design:26.+'
     compile 'com.android.support:preference-v7:26.+'
+    compile 'com.google.android.gms:play-services-maps:11.8.0'
     testCompile 'junit:junit:4.12'
 }
