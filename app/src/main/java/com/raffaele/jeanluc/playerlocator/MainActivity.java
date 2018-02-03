@@ -3,13 +3,16 @@ package com.raffaele.jeanluc.playerlocator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.SwitchPreference;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 
 import static android.R.attr.id;
 
@@ -23,7 +26,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
         Boolean switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_EXAMPLE_SWITCH, false);
+
+        String test = sharedPref.getString("skill_preference", "");
+        Log.d("preftest", test);
+
 
         Button btn = (Button)findViewById(R.id.button2);
 
