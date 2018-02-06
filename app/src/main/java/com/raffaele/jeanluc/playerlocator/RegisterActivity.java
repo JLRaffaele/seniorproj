@@ -153,12 +153,12 @@ public class RegisterActivity extends Activity {
         char[] chars = password.toCharArray();
         byte[] salt = getSalt();
 
-        Log.d("hashtest", salt.toString());
+
 
         PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] hash = skf.generateSecret(spec).getEncoded();
-        Log.d("hashtest", hash.toString());
+
         return iterations + ":" + toHex(salt) + ":" + toHex(hash);
 
     }

@@ -29,8 +29,14 @@ public class MainActivity extends AppCompatActivity {
 
         Boolean switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_EXAMPLE_SWITCH, false);
 
-        String test = sharedPref.getString("skill_preference", "");
-        Log.d("preftest", test);
+        //String test = sharedPref.getString("skill_preference", "");
+
+
+        /*
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("skill_preference", "1");
+        editor.commit();
+        */
 
 
         Button btn = (Button)findViewById(R.id.button2);

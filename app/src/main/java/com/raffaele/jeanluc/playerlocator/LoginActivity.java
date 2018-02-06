@@ -6,6 +6,7 @@ package com.raffaele.jeanluc.playerlocator;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,8 @@ import java.sql.Statement;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+
+import android.preference.PreferenceManager;
 
 
 public class LoginActivity extends Activity {
@@ -95,6 +98,11 @@ public class LoginActivity extends Activity {
 
             if (isSuccess)
             {
+                //Add username to preferences
+                SharedPreferences prefs = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
+                prefs.edit().putString("username", userid).commit();
+
+                //start main activity
                 Intent i = new Intent(LoginActivity.this, MainActivity.class );
                 startActivity(i);
             }
@@ -130,7 +138,7 @@ public class LoginActivity extends Activity {
                         }
                         else
                         {
-                            z = "Invalid Credentials";
+                            z = "Invalid Username/Password";
                             isSuccess = false;
                         }
                     }
@@ -138,8 +146,8 @@ public class LoginActivity extends Activity {
                 catch(Exception ex)
                 {
                     isSuccess = false;
-
-                    z = "Exceptions";
+                    Log.d("logintest", ex.getMessage());
+                    z = "Invalid username/password";
                 }
             }
             return z;

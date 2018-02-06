@@ -13,4 +13,6 @@
         android:entries="@array/skillentries"
         android:entryValues="@array/skillvalues" />
 
+
+
 </PreferenceScreen>

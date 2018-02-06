@@ -25,9 +25,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                     String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
-        PreferenceManager pm = getPreferenceManager();
-        String test = pm.getSharedPreferences().getString("skill_preference", "");
+
 
     }
+
 
 }
