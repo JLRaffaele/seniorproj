@@ -10,10 +10,13 @@ import android.os.Bundle;
 import android.preference.SwitchPreference;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,6 +28,8 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     ConnectionClass connectionClass;
     SharedPreferences sharedPref;
     SharedPreferences sharedPref2;
+    EditTextPreference zipcodeEntry;
+    Boolean validPref = true;
 
 
     private boolean PreferencesChanged = false;
@@ -43,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 .commit();
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-
+        
         //getActionBar().setTitle("Settings");
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -64,9 +69,11 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                     DoPreferenceUpdate doPreferenceUpdate = new DoPreferenceUpdate();
                     doPreferenceUpdate.execute("");
                 }
-
-
-                NavUtils.navigateUpFromSameTask(this);
+                //dont leave settings until they are valid
+                if (validPref)
+                    NavUtils.navigateUpFromSameTask(this);
+                else
+                    Toast.makeText(SettingsActivity.this, "Invalid zipcode", Toast.LENGTH_SHORT).show();
 
                 return true;
         }
@@ -77,6 +84,17 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
         PreferencesChanged = true;
+        if ("zipcode_preference".equals(key))
+        {
+            String val = sharedPreferences.getString("zipcode_preference", "");
+            if (val.length() != 5)
+            {
+                validPref = false;
+                Toast.makeText(SettingsActivity.this, "Invalid Zipcode", Toast.LENGTH_SHORT).show();
+            }
+            else
+                validPref = true;
+        }
     }
 
     public class DoPreferenceUpdate extends AsyncTask<String, String, String>
