@@ -90,7 +90,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         @Override
         protected String doInBackground(String... params)
         {
-
+            /*
             try
             {
                 Connection conn = connectionClass.CONN();
@@ -131,7 +131,10 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 z = "Exceptions";
             }
             return z;
+            */
+            return z;
         }
+
 
     }
 }

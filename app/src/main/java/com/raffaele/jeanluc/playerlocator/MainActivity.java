@@ -13,6 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import static android.R.attr.id;
 
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPref2 = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
 
         Boolean switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_EXAMPLE_SWITCH, false);
 
@@ -37,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("skill_preference", "1");
         editor.commit();
         */
+
+        //get username and display on main screen
+        TextView welcomeText = (TextView)findViewById(R.id.WelcomeText);
+        welcomeText.setText(sharedPref2.getString("username", "UNKNOWN"));
 
 
         Button btn = (Button)findViewById(R.id.button2);

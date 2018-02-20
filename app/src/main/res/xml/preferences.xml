@@ -13,6 +13,9 @@
         android:entries="@array/skillentries"
         android:entryValues="@array/skillvalues" />
 
+    <EditTextPreference
+        android:key="zipcode_preference"
+        android:title="zipcode" />
 
 
 </PreferenceScreen>
