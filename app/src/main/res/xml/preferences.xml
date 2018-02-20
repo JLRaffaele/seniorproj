@@ -16,6 +16,7 @@
     <EditTextPreference
         android:key="zipcode_preference"
         android:title="zipcode"
+        android:inputType="number"
         android:digits="0123456789"/>
 
 

@@ -48,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 .commit();
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-        
+
         //getActionBar().setTitle("Settings");
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
