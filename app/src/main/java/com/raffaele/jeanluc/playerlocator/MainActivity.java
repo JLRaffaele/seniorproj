@@ -27,11 +27,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences sharedPref2 = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
+       // PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        //SharedPreferences sharedPref2 = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
 
-        Boolean switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_EXAMPLE_SWITCH, false);
+       // Boolean switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_EXAMPLE_SWITCH, false);
 
         //String test = sharedPref.getString("skill_preference", "");
 
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         */
 
         //get username and display on main screen
+        /*
         TextView welcomeText = (TextView)findViewById(R.id.WelcomeText);
         welcomeText.setText(sharedPref2.getString("username", "UNKNOWN"));
 
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+        */
     }
 
     @Override
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.action_settings:
+                Log.d("preftest", "in the swtich block");
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;

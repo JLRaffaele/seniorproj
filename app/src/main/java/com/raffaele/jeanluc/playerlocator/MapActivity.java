@@ -7,6 +7,7 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -142,7 +143,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 else
                 {
                     //Get username and zipcode from database
-                    String query = "SELECT loc,username FROM UserInfo join Users on UserInfo.id=Users.id";
+                    String query = "SELECT zip,username FROM UserInfo join Users on UserInfo.id=Users.id";
 
                     Statement stmnt = conn.createStatement();
                     ResultSet rs = stmnt.executeQuery(query);
@@ -152,7 +153,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     while (rs.next())
                     {
-                        userZip = rs.getString("loc");
+                        userZip = rs.getString("zip");
                         userName = rs.getString("username");
                         List<Address> addresses = geocoder.getFromLocationName(userZip, 1);
                         Boolean validResult = !(userName.equals(currentUser));

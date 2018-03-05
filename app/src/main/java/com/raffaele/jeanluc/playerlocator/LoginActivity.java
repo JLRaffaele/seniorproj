@@ -99,8 +99,8 @@ public class LoginActivity extends Activity {
             if (isSuccess)
             {
                 //Add username to preferences
-                SharedPreferences prefs = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
-                prefs.edit().putString("username", userid).commit();
+                //SharedPreferences prefs = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
+                //prefs.edit().putString("username", userid).commit();
 
                 //start main activity
                 Intent i = new Intent(LoginActivity.this, MainActivity.class );

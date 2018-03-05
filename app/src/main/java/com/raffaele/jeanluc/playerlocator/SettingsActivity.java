@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.preference.SwitchPreference;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.PreferenceManager;
+
+
+import com.takisoft.fix.support.v7.preference.EditTextPreference;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -24,7 +26,7 @@ import java.sql.Statement;
 import java.util.prefs.Preferences;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-    public static final String KEY_PREF_EXAMPLE_SWITCH = "example switch";
+    //public static final String KEY_PREF_EXAMPLE_SWITCH = "example switch";
     ConnectionClass connectionClass;
     SharedPreferences sharedPref;
     SharedPreferences sharedPref2;
@@ -39,15 +41,16 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         super.onCreate(savedInstanceState);
 
         connectionClass = new ConnectionClass();
+
         sharedPref = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
         sharedPref2 = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPref2.registerOnSharedPreferenceChangeListener(this);
 
 
         getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
         //getActionBar().setTitle("Settings");
 
@@ -59,6 +62,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+
         switch (item.getItemId())
         {
             //when back arrow is clicked
@@ -77,12 +81,14 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
+        /*
         PreferencesChanged = true;
         if ("zipcode_preference".equals(key))
         {
@@ -95,6 +101,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             else
                 validPref = true;
         }
+        */
     }
 
     public class DoPreferenceUpdate extends AsyncTask<String, String, String>

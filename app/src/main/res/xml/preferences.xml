@@ -7,17 +7,17 @@
         android:summary="@string/switch_summary"
         android:title="@string/switch_title" />
 
-    <ListPreference
-        android:key="skill_preference"
-        android:title="skill"
-        android:entries="@array/skillentries"
-        android:entryValues="@array/skillvalues" />
 
     <EditTextPreference
         android:key="zipcode_preference"
         android:title="zipcode"
         android:inputType="number"
         android:digits="0123456789"/>
+    <ListPreference
+        android:key="skill_preference"
+        android:title="skill"
+        android:entries="@array/skillentries"
+        android:entryValues="@array/skillvalues" />
 
 
 </PreferenceScreen>
