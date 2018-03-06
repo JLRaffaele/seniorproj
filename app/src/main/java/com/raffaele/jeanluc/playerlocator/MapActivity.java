@@ -41,10 +41,8 @@ import java.util.concurrent.TimeUnit;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 {
-    String myzip = "";
-    LatLng myLatLng;
-    List<String> Usernames = new ArrayList<>();
-    List<LatLng> LatLngs = new ArrayList<>();
+    List<String> Usernames;
+    List<LatLng> LatLngs;
 
     ConnectionClass connectionClass;
 
@@ -55,20 +53,70 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
+        Usernames = new ArrayList<>();
+        LatLngs = new ArrayList<>();
         connectionClass = new ConnectionClass();
         GetMapData mapData = new GetMapData();
 
-            mapData.execute("");
+        try {
+            mapData.execute("").get();
+        }
+        catch(InterruptedException | ExecutionException e)
+        {
 
+        }
+
+
+            super.onCreate(savedInstanceState);
+
+            setContentView(R.layout.activity_maps);
+            final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+
+
+
+        mapFragment.getMapAsync(this);
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap)
+    {
+        LatLng myLatLng = getMyLatLng();
+
+        float zoom = 10;
+        googleMap.addMarker(new MarkerOptions().position(myLatLng)
+                .title("Your Location!"));
+
+        //add marker for each user
+        for (int i = 0; i < LatLngs.size(); i++)
+        {
+            LatLng userLocation = LatLngs.get(i);
+
+            googleMap.addMarker(new MarkerOptions().position(userLocation)
+                    .title(Usernames.get(i)));
+        }
+
+        Log.d("maptest" , "In onmapready: useranme: " + Usernames.toString());
+        Log.d("maptest", "In onmapready: locations: " + LatLngs.toString());
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, zoom));
+
+
+    }
+
+    private LatLng getMyLatLng()
+    {
+        LatLng myLatLng = new LatLng(0,0);
+        String myzip;
         try
         {
             //get user zipcode from preferences
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             myzip = sharedPref.getString("zipcode_preference", "");
 
-            List<Address> addresses = geocoder.getFromLocationName(myzip, 1);
+            List<Address> addresses = geocoder.getFromLocationName(myzip, 5);
 
+            Log.d("maptest" , "In: getMyLatLng: Address Listing: " + addresses.toString());
             if (addresses != null && !addresses.isEmpty())
             {
                 Address address = addresses.get(0);
@@ -86,39 +134,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         catch (IOException e)
         {
-            Log.d("mapError", "error in getting lat and long");
+            Log.e("mapError", "error in getting latitude and longitude");
         }
 
-            super.onCreate(savedInstanceState);
-
-            setContentView(R.layout.activity_maps);
-            final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-
-            mapFragment.getMapAsync(this);
-
+        return myLatLng;
     }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap)
-    {
-        float zoom = 10;
-        googleMap.addMarker(new MarkerOptions().position(myLatLng)
-                .title("Your Location!"));
-
-        //add marker for each user
-        for (int i = 0; i < LatLngs.size(); i++)
-        {
-            LatLng userLocation = LatLngs.get(i);
-
-            googleMap.addMarker(new MarkerOptions().position(userLocation)
-                    .title(Usernames.get(i)));
-        }
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, zoom));
-
-
-    }
-
 
     public class GetMapData extends AsyncTask<String,String,String>
     {
@@ -132,6 +152,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             String userZip;
             String userName;
             connectionSuccess = false;
+            Boolean validResult = false;
 
 
             try
@@ -156,7 +177,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         userZip = rs.getString("zip");
                         userName = rs.getString("username");
                         List<Address> addresses = geocoder.getFromLocationName(userZip, 1);
-                        Boolean validResult = !(userName.equals(currentUser));
+                        Log.d("maptest","In doinbackground: addresses: " + addresses.toString());
+                         if(userName.equals(currentUser))
+                             validResult = false;
+                         else
+                             validResult = true;
                         if (addresses != null && !addresses.isEmpty() && validResult)
                         {
 
@@ -185,6 +210,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         }
     }
+
+
 
 
 }

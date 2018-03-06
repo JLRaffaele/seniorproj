@@ -14,10 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+import com.takisoft.fix.support.v7.preference.DatePickerPreference;
 
-import org.w3c.dom.Text;
-
-import static android.R.attr.id;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,25 +25,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       // PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        //SharedPreferences sharedPref2 = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences userFile = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
 
-       // Boolean switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_EXAMPLE_SWITCH, false);
+       // Boolean switchPref = userFile.getBoolean(SettingsActivity.KEY_PREF_EXAMPLE_SWITCH, false);
 
-        //String test = sharedPref.getString("skill_preference", "");
+        //String test = userFile.getString("skill_preference", "");
 
 
         /*
-        SharedPreferences.Editor editor = sharedPref.edit();
+        SharedPreferences.Editor editor = userFile.edit();
         editor.putString("skill_preference", "1");
         editor.commit();
         */
 
         //get username and display on main screen
-        /*
+
         TextView welcomeText = (TextView)findViewById(R.id.WelcomeText);
-        welcomeText.setText(sharedPref2.getString("username", "UNKNOWN"));
+        welcomeText.setText(userFile.getString("username", "UNKNOWN"));
 
 
         Button btn = (Button)findViewById(R.id.button2);
@@ -59,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-        */
+
     }
 
     @Override
@@ -76,13 +74,20 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.action_settings:
-                Log.d("preftest", "in the swtich block");
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_logout:
+                finish();
+                break;
             default:
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed()
+    {
+
+    }
 }

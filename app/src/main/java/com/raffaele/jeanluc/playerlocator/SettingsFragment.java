@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
+import com.takisoft.fix.support.v7.preference.DatePickerPreference;
 //import android.support.v7.preference.PreferenceFragmentCompat;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -13,7 +14,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState,
                                     String rootKey) {
-        setPreferencesFromResource(R.xml.preferences2, rootKey);
+        setPreferencesFromResource(R.xml.preferences, rootKey);
 
 
 

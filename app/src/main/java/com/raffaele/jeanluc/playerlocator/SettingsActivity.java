@@ -3,34 +3,29 @@ package com.raffaele.jeanluc.playerlocator;
 /**
  * Created by Jean-Luc on 1/3/2018.
  */
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.SwitchPreference;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 
 
 import com.takisoft.fix.support.v7.preference.EditTextPreference;
+
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.prefs.Preferences;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     //public static final String KEY_PREF_EXAMPLE_SWITCH = "example switch";
     ConnectionClass connectionClass;
+    SharedPreferences userFile;
     SharedPreferences sharedPref;
-    SharedPreferences sharedPref2;
-    EditTextPreference zipcodeEntry;
     Boolean validPref = true;
 
 
@@ -42,9 +37,9 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
         connectionClass = new ConnectionClass();
 
-        sharedPref = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
-        sharedPref2 = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPref2.registerOnSharedPreferenceChangeListener(this);
+        userFile = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPref.registerOnSharedPreferenceChangeListener(this);
 
 
         getSupportFragmentManager().beginTransaction()
@@ -88,7 +83,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-        /*
+
         PreferencesChanged = true;
         if ("zipcode_preference".equals(key))
         {
@@ -101,8 +96,19 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             else
                 validPref = true;
         }
-        */
+
+
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (validPref)
+            NavUtils.navigateUpFromSameTask(this);
+        else
+            Toast.makeText(SettingsActivity.this, "Invalid Settings", Toast.LENGTH_SHORT).show();
+    }
+
 
     public class DoPreferenceUpdate extends AsyncTask<String, String, String>
     {
@@ -115,7 +121,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         @Override
         protected String doInBackground(String... params)
         {
-            /*
+
             try
             {
                 Connection conn = connectionClass.CONN();
@@ -126,24 +132,19 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 else
                 {
 
-                    userid = sharedPref.getString("username", "UNKNOWN");
-                    Integer skill = Integer.parseInt(sharedPref2.getString("skill_preference", ""));
+                    userid = userFile.getString("username", "UNKNOWN");
+                    String skill = sharedPref.getString("skill_preference", "");
+                    String zip = sharedPref.getString("zipcode_preference", "");
 
-                    String query = "UPDATE UserInfo SET skill=" + skill
+                    String query = "UPDATE UserInfo SET skill=" + skill + ", zip= " + zip
                             + " WHERE id = (SELECT id FROM Users WHERE username = '"
                             + userid + "')"
                             + " SELECT * FROM UserInfo";
 
 
-                    Log.d("preftest", query);
-
-
-
-
                     Statement stmnt = conn.createStatement();
                     ResultSet rs = stmnt.executeQuery(query);
 
-                    Log.d("preftest", "madeithere2");
                     z = "update successful";
                     isSuccess = true;
                 }
@@ -155,8 +156,6 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 Log.d("preftest", "error exception");
                 z = "Exceptions";
             }
-            return z;
-            */
             return z;
         }
 
