@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.sql.Connection;
@@ -39,10 +41,10 @@ import java.util.concurrent.TimeUnit;
  * Created by Jean-Luc on 1/24/2018.
  */
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener
 {
-    List<String> Usernames;
-    List<LatLng> LatLngs;
+
+    List<UserInfo> userInfoList;
 
     ConnectionClass connectionClass;
 
@@ -53,8 +55,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Usernames = new ArrayList<>();
-        LatLngs = new ArrayList<>();
+        userInfoList = new ArrayList<>();
+
         connectionClass = new ConnectionClass();
         GetMapData mapData = new GetMapData();
 
@@ -63,15 +65,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         catch(InterruptedException | ExecutionException e)
         {
+            Log.e("mapdata", "Error obtaining map data");
 
         }
 
+        Toast.makeText(this, "Error obtaining map data", Toast.LENGTH_SHORT);
+        super.onCreate(savedInstanceState);
 
-            super.onCreate(savedInstanceState);
-
-            setContentView(R.layout.activity_maps);
-            final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
+        setContentView(R.layout.activity_maps);
+        final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
 
 
 
@@ -84,24 +87,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     {
         LatLng myLatLng = getMyLatLng();
 
+        googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         float zoom = 10;
         googleMap.addMarker(new MarkerOptions().position(myLatLng)
                 .title("Your Location!"));
 
         //add marker for each user
-        for (int i = 0; i < LatLngs.size(); i++)
+        for (int i = 0; i < userInfoList.size(); i++)
         {
-            LatLng userLocation = LatLngs.get(i);
+            UserInfo user = userInfoList.get(i);
+            LatLng userLocation = user.LatLng;
 
             googleMap.addMarker(new MarkerOptions().position(userLocation)
-                    .title(Usernames.get(i)));
+                    .title(user.UserName))
+                    .setSnippet("skill: " + user.Skill);
         }
 
-        Log.d("maptest" , "In onmapready: useranme: " + Usernames.toString());
-        Log.d("maptest", "In onmapready: locations: " + LatLngs.toString());
+        Log.d("maptest" , "In onmapready: username: " + userInfoList.toString());
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, zoom));
+        //googleMap.setOnMarkerClickListener(this);
+
+    }
 
 
+    @Override
+    public boolean onMarkerClick(final Marker marker)
+    {
+        return true;
     }
 
     private LatLng getMyLatLng()
@@ -140,7 +152,61 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return myLatLng;
     }
 
-    public class GetMapData extends AsyncTask<String,String,String>
+
+    class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter
+    {
+        private final View myContentsView;
+
+        MyInfoWindowAdapter() { myContentsView = getLayoutInflater().inflate(R.layout.custom_info_contents, null);}
+
+        @Override
+        public View getInfoContents(Marker marker)
+        {
+            TextView tvTitle = ((TextView)myContentsView.findViewById(R.id.title));
+            tvTitle.setText(marker.getTitle());
+            TextView tvSnippet = ((TextView)myContentsView.findViewById(R.id.snippet));
+            tvSnippet.setText((marker.getSnippet()));
+
+            return myContentsView;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker)
+        {
+            return null;
+        }
+    }
+
+
+    class UserInfo
+    {
+        LatLng LatLng;
+        String UserName;
+        String Transportation;
+        String Setups;
+        String Skill;
+
+        public UserInfo()
+        {
+            UserName = null;
+            LatLng = null;
+            Transportation = null;
+            Setups = null;
+            Skill = null;
+        }
+
+        public UserInfo(LatLng latLng, String userName, String transportation, String setups, String skill)
+        {
+            LatLng = latLng;
+            UserName = userName;
+            Transportation = transportation;
+            Setups = setups;
+            Skill = skill;
+        }
+
+    }
+
+    class GetMapData extends AsyncTask<String,String,String>
     {
         String z = "";
 
@@ -151,8 +217,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         {
             String userZip;
             String userName;
+            String skill;
+            String transportation;
+            String setups;
             connectionSuccess = false;
-            Boolean validResult = false;
+            Boolean validResult = true;
 
 
             try
@@ -164,7 +233,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 else
                 {
                     //Get username and zipcode from database
-                    String query = "SELECT zip,username FROM UserInfo join Users on UserInfo.id=Users.id";
+                    String query = "SELECT zip,username,skill,dob,transportation,setups FROM UserInfo join Users on UserInfo.id=Users.id";
 
                     Statement stmnt = conn.createStatement();
                     ResultSet rs = stmnt.executeQuery(query);
@@ -176,18 +245,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     {
                         userZip = rs.getString("zip");
                         userName = rs.getString("username");
+                        skill = rs.getString("skill");
+                        transportation = rs.getString("transportation");
+                        setups = rs.getString("setups");
+
+
                         List<Address> addresses = geocoder.getFromLocationName(userZip, 1);
                         Log.d("maptest","In doinbackground: addresses: " + addresses.toString());
-                         if(userName.equals(currentUser))
+                        if(userName.equals(currentUser))
                              validResult = false;
-                         else
-                             validResult = true;
                         if (addresses != null && !addresses.isEmpty() && validResult)
                         {
-
                             Address address = addresses.get(0);
-                            LatLngs.add(new LatLng(address.getLatitude(), address.getLongitude()));
-                            Usernames.add(userName);
+                            LatLng coordinates = new LatLng(address.getLatitude(), address.getLongitude());
+
+                            UserInfo info = new UserInfo(coordinates, userName, transportation, setups, skill);
+                            userInfoList.add(info);
+
                         }
                     }
                     z = "Got map data";

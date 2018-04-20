@@ -49,7 +49,8 @@
             android:label="Register New Account" />
         <activity
             android:name=".LoginActivity"
-            android:label="Main application functionality" >
+            android:label="Main application functionality"
+            android:screenOrientation="sensorPortrait">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 

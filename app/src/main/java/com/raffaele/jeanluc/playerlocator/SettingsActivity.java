@@ -13,6 +13,7 @@ import android.support.v7.preference.PreferenceManager;
 
 import com.takisoft.fix.support.v7.preference.EditTextPreference;
 
+
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -135,12 +136,15 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                     userid = userFile.getString("username", "UNKNOWN");
                     String skill = sharedPref.getString("skill_preference", "");
                     String zip = sharedPref.getString("zipcode_preference", "");
+                    String transportation = sharedPref.getString("transportation_preference", "");
+                    String setups = sharedPref.getString("setup_preference", "");
 
-                    String query = "UPDATE UserInfo SET skill=" + skill + ", zip= " + zip
+                    String query = "UPDATE UserInfo SET skill=" + skill + ", zip= " + zip + ", transportation= " + "'" + transportation + "'" + ", setups= " + setups
                             + " WHERE id = (SELECT id FROM Users WHERE username = '"
                             + userid + "')"
                             + " SELECT * FROM UserInfo";
 
+                    Log.d("preftest", query);
 
                     Statement stmnt = conn.createStatement();
                     ResultSet rs = stmnt.executeQuery(query);
@@ -154,6 +158,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             {
                 isSuccess = false;
                 Log.d("preftest", "error exception");
+                Log.d("preftest", ex.getMessage());
                 z = "Exceptions";
             }
             return z;

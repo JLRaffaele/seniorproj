@@ -15,4 +15,31 @@
         <item>4</item>
         <item>5</item>
     </string-array>
+
+
+    <string-array name="transportationentries">
+        <item>None</item>
+        <item>Bike</item>
+        <item>Car</item>
+    </string-array>
+
+    <string-array name="transportationvalues">
+        <item>None</item>
+        <item>Bike</item>
+        <item>Car</item>
+    </string-array>
+
+    <string-array name="setupentries">
+        <item>0</item>
+        <item>1</item>
+        <item>1.5</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="setupvalues">
+        <item>0</item>
+        <item>1</item>
+        <item>1.5</item>
+        <item>2</item>
+    </string-array>
 </resources>

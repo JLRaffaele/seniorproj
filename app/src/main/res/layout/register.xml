@@ -12,14 +12,15 @@
         <LinearLayout android:id="@+id/header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@layout/header_gradient"
+            android:background="@layout/footer_repeat"
             android:paddingTop="5dip"
             android:paddingBottom="5dip">
             <!-- Logo Start-->
-            <ImageView android:src="@drawable/logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"/>
+            <ImageView
+                android:layout_width="372dp"
+                android:layout_height="353dp"
+                android:layout_marginLeft="10dip"
+                android:src="@drawable/logo" />
             <!-- Logo Ends -->
         </LinearLayout>
         <!--  Header Ends -->
@@ -44,7 +45,7 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Name"
+                android:text="@string/usernameText"
                 android:textColor="#372c24" />
 
             <EditText
@@ -59,7 +60,7 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Password"
+                android:text="@string/passwordText"
                 android:textColor="#372c24" />
 
             <EditText
@@ -67,7 +68,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:password="true"
+                android:inputType="textPassword"
                 android:singleLine="true" />
             <!-- Register Button -->
             <Button

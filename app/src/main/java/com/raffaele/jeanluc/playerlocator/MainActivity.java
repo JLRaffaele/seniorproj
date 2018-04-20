@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
-import com.takisoft.fix.support.v7.preference.DatePickerPreference;
+
 
 
 public class MainActivity extends AppCompatActivity {

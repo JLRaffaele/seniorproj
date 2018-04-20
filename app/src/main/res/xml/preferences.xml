@@ -5,22 +5,37 @@
     <android.support.v7.preference.SwitchPreferenceCompat
         android:defaultValue="true"
         android:key="example_switch"
-        android:summary="@string/switch_summary"
-        android:title="@string/switch_title" />
+        android:summary="Bring it on"
+        android:title="Show me on the map" />
 
 
     <EditTextPreference
         android:key="zipcode_preference"
-        android:title="zipcode"
+        android:title="Zipcode"
         android:inputType="number"
-        android:digits="0123456789"/>
+        android:digits="0123456789"
+        android:summary="Help people find you"/>
     <ListPreference
         android:key="skill_preference"
-        android:title="skill"
+        android:title="Skill"
         android:entries="@array/skillentries"
-        android:entryValues="@array/skillvalues" />
+        android:entryValues="@array/skillvalues"
+        android:summary="How tough are ya?"/>
 
-    
+    <ListPreference
+        android:key="transportation_preference"
+        android:title="Transportation Options"
+        android:entries="@array/transportationentries"
+        android:entryValues="@array/transportationvalues"
+        android:summary="How can you get around?"
+        />
 
+    <ListPreference
+        android:key="setup_preference"
+        android:title="# of setups"
+        android:entries="@array/setupentries"
+        android:entryValues="@array/setupvalues"
+        android:summary="How many do you have?"
+        />
 
 </PreferenceScreen>
