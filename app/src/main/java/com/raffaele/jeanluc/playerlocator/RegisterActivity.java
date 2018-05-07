@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class RegisterActivity extends Activity {
     ConnectionClass connectionClass;
     Button btnRegister;
     EditText edtuserid, edtpass;
+    ProgressBar pbbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,8 @@ public class RegisterActivity extends Activity {
         edtuserid = (EditText) findViewById(R.id.edtuserid);
         edtpass = (EditText) findViewById(R.id.edtpass);
         btnRegister = (Button) findViewById(R.id.btnRegister);
+        pbbar = (ProgressBar) findViewById(R.id.pbbar);
+        pbbar.setVisibility(View.GONE);
 
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
