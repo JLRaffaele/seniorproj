@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,27 +27,29 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences userFile = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
 
-       // Boolean switchPref = userFile.getBoolean(SettingsActivity.KEY_PREF_EXAMPLE_SWITCH, false);
+        //logged in users' name
+        username = getSharedPreferences("PlayerLocator", MODE_PRIVATE).getString("username", "UNKNOWN");
 
-        //String test = userFile.getString("skill_preference", "");
-
-
-        /*
-        SharedPreferences.Editor editor = userFile.edit();
-        editor.putString("skill_preference", "1");
-        editor.commit();
-        */
-
-        //get username and display on main screen
-
-        TextView welcomeText = (TextView)findViewById(R.id.WelcomeText);
-        welcomeText.setText(userFile.getString("username", "UNKNOWN"));
+        //Name of any viewable profile
+        Intent i = getIntent();
+        String profile_name = i.getExtras().getString("profile_name");
 
 
-        Button btn = (Button)findViewById(R.id.button2);
+        TextView profile_name_text = (TextView)findViewById(R.id.main_activity_username);
+        profile_name_text.setText(profile_name);
+
+        Button btn = (Button)findViewById(R.id.main_activity_button);
+        Button backbtn = (Button)findViewById(R.id.main_activity_back_button);
+
+        //display map button if we are on our own profile -- else display challenge button
+        if(username.equals(profile_name))
+        {
+            btn.setText("View the map!");
+            backbtn.setVisibility(View.GONE);
+        }
+        else
+            btn.setText("Challenge " + profile_name + "!");
 
         btn.setOnClickListener(new View.OnClickListener()
         {
@@ -76,9 +79,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
-                return true;
+                break;
             case R.id.action_logout:
                 finish();
+                break;
+            case R.id.action_my_profile:
+                Intent i = getIntent();
+                i.putExtra("profile_name", username);
+                finish();
+                startActivity(i);
                 break;
             default:
         }

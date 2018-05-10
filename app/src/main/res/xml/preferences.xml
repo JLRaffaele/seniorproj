@@ -4,7 +4,7 @@
 
     <android.support.v7.preference.SwitchPreferenceCompat
         android:defaultValue="true"
-        android:key="example_switch"
+        android:key="show_on_map_preference"
         android:summary="Bring it on"
         android:title="Show me on the map" />
 
@@ -14,13 +14,16 @@
         android:title="Zipcode"
         android:inputType="number"
         android:digits="0123456789"
-        android:summary="Help people find you"/>
+        android:summary="Help people find you"
+        />
+
     <ListPreference
         android:key="skill_preference"
         android:title="Skill"
         android:entries="@array/skillentries"
         android:entryValues="@array/skillvalues"
-        android:summary="How tough are ya?"/>
+        android:summary="How tough are ya?"
+        />
 
     <ListPreference
         android:key="transportation_preference"
@@ -38,4 +41,21 @@
         android:summary="How many do you have?"
         />
 
+    <EditTextPreference
+        android:key="bio_preference"
+        android:title="Bio"
+        android:inputType="text"
+        android:summary="What do you want people to know?"
+        />
+
+    <EditTextPreference
+        android:key="contact_preference"
+        android:title="Contact Info"
+        android:inputType="text"
+        android:summary="This will only be shown to accepted challengers"
+        />
+
+    <DatePickerPreference
+
+        />
 </PreferenceScreen>

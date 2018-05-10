@@ -73,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 if (validPref)
                     NavUtils.navigateUpFromSameTask(this);
                 else
-                    Toast.makeText(SettingsActivity.this, "Invalid zipcode", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingsActivity.this, "Invalid settings", Toast.LENGTH_SHORT).show();
 
                 return true;
         }
@@ -138,6 +138,9 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                     String zip = sharedPref.getString("zipcode_preference", "");
                     String transportation = sharedPref.getString("transportation_preference", "");
                     String setups = sharedPref.getString("setup_preference", "");
+                    Boolean showOnMap = sharedPref.getBoolean("show_on_map_preference", true);
+
+                    //TODO: ADD BIO AND CONTACT PREFERENCES
 
                     String query = "UPDATE UserInfo SET skill=" + skill + ", zip= " + zip + ", transportation= " + "'" + transportation + "'" + ", setups= " + setups
                             + " WHERE id = (SELECT id FROM Users WHERE username = '"

@@ -17,21 +17,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-
-import android.preference.PreferenceManager;
 
 
 public class LoginActivity extends Activity {
@@ -43,8 +37,8 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setting default screen to login.xml
-        setContentView(R.layout.login);
+        // setting default screen to activity_login.xmllogin.xml
+        setContentView(R.layout.activity_login);
 
         TextView registerScreen = (TextView) findViewById(R.id.link_to_register);
 
@@ -100,13 +94,14 @@ public class LoginActivity extends Activity {
             {
                 //Add username to preferences
                 SharedPreferences prefs = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
-                prefs.edit().putString("username", userid).commit();
+                prefs.edit().putString("username", userid).apply();
 
                 //clear password once logged in
                 edtpass.getText().clear();
 
                 //start main activity
                 Intent i = new Intent(LoginActivity.this, MainActivity.class );
+                i.putExtra("profile_name", userid);
                 startActivity(i);
             }
         }

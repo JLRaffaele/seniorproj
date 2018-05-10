@@ -8,38 +8,52 @@
     tools:context="com.raffaele.jeanluc.playerlocator.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/repeat_bg_no_text"
+            android:scaleType="fitXY"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/WelcomeText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/button2"
-                android:gravity="left"
-                android:text="" />
-            </LinearLayout>
+
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|center_horizontal"
-                android:text="Button"
-                app:layout_anchor="@+id/include"
-                app:layout_anchorGravity="center_vertical|center_horizontal" />
+
+                <Button
+                    android:id="@+id/main_activity_back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="@string/main_activity_back_btn"
+                    />
+
+                <TextView
+                    android:id="@+id/main_activity_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="TEST_TEXT"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+
+
+
+                <Button
+                    android:id="@+id/main_activity_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:text=""
+                    app:layout_anchor="@+id/include"
+                    app:layout_anchorGravity="center_vertical|center_horizontal" />
+
+
         </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

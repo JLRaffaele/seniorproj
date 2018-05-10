@@ -1,5 +1,6 @@
 package com.raffaele.jeanluc.playerlocator;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -53,6 +54,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     Boolean connectionSuccess;
     final Geocoder geocoder = new Geocoder(this);
+    String USER_INFOBOX_TITLE = "Your location!";
+    String currentUser;
 
 
     @Override
@@ -97,7 +100,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         googleMap.setOnInfoWindowClickListener(this);
         float zoom = 10;
         googleMap.addMarker(new MarkerOptions().position(myLatLng)
-                .title("Your Location!"));
+                .title(USER_INFOBOX_TITLE));
 
         //add marker for each user
         for (int i = 0; i < userInfoList.size(); i++)
@@ -120,8 +123,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
-        finish();
+    public void onInfoWindowClick(Marker marker)
+    {
+        Intent i = new Intent(this, MainActivity.class);
+
+
+        //if the user clicks on their own infobox
+        if (marker.getTitle().equals(USER_INFOBOX_TITLE))
+        {
+            i.putExtra("profile_name", currentUser);
+        }
+        else
+        {
+            i.putExtra("profile_name", marker.getTitle());
+        }
+        startActivity(i);
     }
 
 
@@ -130,6 +146,47 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     {
         return true;
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
+
+
+
+    class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter
+    {
+        private final View myContentsView;
+
+        MyInfoWindowAdapter() { myContentsView = getLayoutInflater().inflate(R.layout.custom_info_contents, null);}
+
+        @Override
+        public View getInfoContents(Marker marker)
+        {
+           return null;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker)
+        {
+
+            TextView tvTitle = ((TextView)myContentsView.findViewById(R.id.title));
+            tvTitle.setText(marker.getTitle());
+            TextView tvSnippet = ((TextView)myContentsView.findViewById(R.id.snippet));
+            tvSnippet.setText((marker.getSnippet()));
+
+            return myContentsView;
+        }
+    }
+
+
+
+
+
+
+
+
 
     private LatLng getMyLatLng()
     {
@@ -165,32 +222,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         return myLatLng;
-    }
-
-
-    class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter
-    {
-        private final View myContentsView;
-
-        MyInfoWindowAdapter() { myContentsView = getLayoutInflater().inflate(R.layout.custom_info_contents, null);}
-
-        @Override
-        public View getInfoContents(Marker marker)
-        {
-           return null;
-        }
-
-        @Override
-        public View getInfoWindow(Marker marker)
-        {
-
-            TextView tvTitle = ((TextView)myContentsView.findViewById(R.id.title));
-            tvTitle.setText(marker.getTitle());
-            TextView tvSnippet = ((TextView)myContentsView.findViewById(R.id.snippet));
-            tvSnippet.setText((marker.getSnippet()));
-
-            return myContentsView;
-        }
     }
 
 
@@ -255,8 +286,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Statement stmnt = conn.createStatement();
                     ResultSet rs = stmnt.executeQuery(query);
 
-                    SharedPreferences sharedPref = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
-                    String currentUser = sharedPref.getString("username", "UNKNOWN");
+
 
                     while (rs.next())
                     {
@@ -266,6 +296,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         transportation = rs.getString("transportation");
                         setups = rs.getString("setups");
 
+                        SharedPreferences sharedPref = getSharedPreferences("PlayerLocator", MODE_PRIVATE);
+                        currentUser = sharedPref.getString("username", "UNKNOWN");
 
                         List<Address> addresses = geocoder.getFromLocationName(userZip, 1);
 
