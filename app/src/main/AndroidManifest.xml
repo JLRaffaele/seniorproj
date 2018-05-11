@@ -11,40 +11,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-
 
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.raffaele.jeanluc.playerlocator.MainActivity"/>
+                android:value="com.raffaele.jeanluc.playerlocator.MainActivity" />
         </activity>
-
         <activity
             android:name=".MapActivity"
             android:label="MapActivity"
-            android:noHistory="true">
-        </activity>
-
+            android:noHistory="true"></activity>
         <activity
             android:name=".RegisterActivity"
             android:label="Register New Account" />
@@ -52,13 +42,21 @@
             android:name=".LoginActivity"
             android:label="Main application functionality"
             android:screenOrientation="sensorPortrait">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
+        <activity
+            android:name=".ChallengeActivity"
+            android:label="@string/title_activity_challenge"
+            android:parentActivityName=".MainActivity"
+           >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.raffaele.jeanluc.playerlocator.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -10,7 +10,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 
-
 import com.takisoft.fix.support.v7.preference.EditTextPreference;
 
 
@@ -28,9 +27,8 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     SharedPreferences userFile;
     SharedPreferences sharedPref;
     Boolean validPref = true;
-
-
     private boolean PreferencesChanged = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -98,6 +96,17 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 validPref = true;
         }
 
+        if ("bio_preference".equals(key) || "contact_preference".equals(key))
+        {
+            String val = sharedPreferences.getString(key, "");
+            if (val.length() > 250)
+            {
+                validPref = false;
+                Toast.makeText(SettingsActivity.this, "This is too long! ", Toast.LENGTH_SHORT).show();
+            }
+            else
+                validPref = true;
+        }
 
     }
 
@@ -138,11 +147,14 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                     String zip = sharedPref.getString("zipcode_preference", "");
                     String transportation = sharedPref.getString("transportation_preference", "");
                     String setups = sharedPref.getString("setup_preference", "");
-                    Boolean showOnMap = sharedPref.getBoolean("show_on_map_preference", true);
+                    int showOnMap = sharedPref.getBoolean("show_on_map_preference", true) ? 1 : 0;  //gets the bool and converts to 1 or 0
+                    String bio = sharedPref.getString("bio_preference", "").trim();                 //trim strips beginning and ending space
+                    String contact = sharedPref.getString("contact_preference", "").trim();         //trim strips beginning and ending space
 
-                    //TODO: ADD BIO AND CONTACT PREFERENCES
+
 
                     String query = "UPDATE UserInfo SET skill=" + skill + ", zip= " + zip + ", transportation= " + "'" + transportation + "'" + ", setups= " + setups
+                            + ", showOnMap= " + showOnMap + ", bio= " + "'" + bio + "'" + ", contactInfo= " + "'" + contact + "'"
                             + " WHERE id = (SELECT id FROM Users WHERE username = '"
                             + userid + "')"
                             + " SELECT * FROM UserInfo";

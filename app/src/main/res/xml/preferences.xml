@@ -45,7 +45,7 @@
         android:key="bio_preference"
         android:title="Bio"
         android:inputType="text"
-        android:summary="What do you want people to know?"
+        android:summary="Everybody can see this"
         />
 
     <EditTextPreference
@@ -55,7 +55,4 @@
         android:summary="This will only be shown to accepted challengers"
         />
 
-    <DatePickerPreference
-
-        />
 </PreferenceScreen>

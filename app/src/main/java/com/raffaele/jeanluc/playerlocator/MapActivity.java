@@ -301,11 +301,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                         List<Address> addresses = geocoder.getFromLocationName(userZip, 1);
 
-                        if(userName.equals(currentUser))
-                            validResult = false;
-                        else
-                            validResult = true;
-                        if (addresses != null && !addresses.isEmpty() && validResult)
+                        if (addresses != null && !addresses.isEmpty() && !userName.equals(currentUser))
                         {
                             Address address = addresses.get(0);
                             LatLng coordinates = new LatLng(address.getLatitude(), address.getLongitude());
