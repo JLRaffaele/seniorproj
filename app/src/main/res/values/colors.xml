@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="PendingBackground">#FFFF00</color>
+    <color name="RejectedBackground">#80FF00</color>
+    <color name="AcceptedBackground">#FF8000</color>
 </resources>

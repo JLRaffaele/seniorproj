@@ -103,6 +103,7 @@ public class LoginActivity extends Activity {
                 Intent i = new Intent(LoginActivity.this, MainActivity.class );
                 i.putExtra("profile_name", userid);
                 startActivity(i);
+                finish();
             }
         }
 

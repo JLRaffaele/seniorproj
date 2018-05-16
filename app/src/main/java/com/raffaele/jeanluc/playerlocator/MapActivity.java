@@ -280,8 +280,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     z = "could not populate map";
                 else
                 {
-                    //Get data from database
-                    String query = "SELECT zip,username,skill,dob,transportation,setups FROM UserInfo join Users on UserInfo.id=Users.id";
+                    //Get data from database -- only users who have showOnMap enabled
+                    String query = "SELECT zip,username,skill,dob,transportation,setups FROM UserInfo join Users on UserInfo.id=Users.id WHERE showOnMap = 1";
 
                     Statement stmnt = conn.createStatement();
                     ResultSet rs = stmnt.executeQuery(query);

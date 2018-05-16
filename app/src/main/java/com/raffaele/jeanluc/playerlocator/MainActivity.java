@@ -54,12 +54,12 @@ public class MainActivity extends AppCompatActivity {
         Button main_button = (Button)findViewById(R.id.main_activity_button);
         Button backbtn = (Button)findViewById(R.id.main_activity_back_button);
 
-        //display map button if we are on our own profile -- else display challenge button
+        //if we are on our own profile
         if(username.equals(profile_name))
         {
             main_button.setText("View the map!");
 
-            //dont show back button on our own profile
+            //don't show back button on our own profile
             backbtn.setVisibility(View.GONE);
 
             main_button.setOnClickListener(new View.OnClickListener()
@@ -132,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.action_logout:
+                Intent intent_logout = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent_logout);
                 finish();
                 break;
             case R.id.action_my_profile:
@@ -142,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_challenges:
                 Intent intent2 = new Intent(MainActivity.this, ChallengeActivity.class );
+                intent2.putExtra("usernaem", username);
                 startActivity(intent2);
             default:
         }
@@ -212,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
             connectionClass = new ConnectionClass();
             TextView profile_name_text = (TextView)findViewById(R.id.main_activity_username);
             String challengee = profile_name_text.getText().toString();
+            Boolean validChallenge = true;
             try
             {
                 Connection conn = connectionClass.CONN();
@@ -223,21 +227,23 @@ public class MainActivity extends AppCompatActivity {
                     //TODO: major refactoring of this code
 
                     //Check to see if challenge exists
-                    String query = "SELECT challenger,challengee FROM Challenges WHERE challenger= '" + username + "' AND challengee= '" + challengee + "'";
+                    String query = "SELECT challenge,challengee FROM Challenges WHERE challenge= '" + username + "' AND challengee= '" + challengee + "'";
                     Statement stmt = conn.createStatement();
                     ResultSet rs = stmt.executeQuery(query);
 
                     //Check to see if they have been challenged by the person
-                    if (!rs.next()) {
-                        query = "SELECT challenger,challengee FROM Challenges WHERE challenger= '" + challengee + "' AND challengee= '" + username + "'";
-                        stmt = conn.createStatement();
-                        rs = stmt.executeQuery(query);
-                    }
-                    z = "Challenge already exists!";
+                    if (rs.next())
+                        validChallenge = false;
 
-                    if (!rs.next()) {
+                    query = "SELECT challenge,challengee FROM Challenges WHERE challenge= '" + challengee + "' AND challengee= '" + username + "'";
+                    stmt = conn.createStatement();
+                    rs = stmt.executeQuery(query);
 
-                        query = "INSERT INTO Challenges (challenger, challengee) VALUES " +
+
+
+                    if (!rs.next() && validChallenge) {
+
+                        query = "INSERT INTO Challenges (challenge, challengee) VALUES " +
                                 "('" + username + "','" + challengee + "');";
 
                         Log.d("challenge_debug", query);
@@ -246,6 +252,9 @@ public class MainActivity extends AppCompatActivity {
 
                         z = "Challenge Sent!";
                     }
+
+                    else
+                        z = "Challenge already exists!";
 
                 }
             }
