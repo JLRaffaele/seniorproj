@@ -21,12 +21,14 @@
         <item>None</item>
         <item>Bike</item>
         <item>Car</item>
+        <item>Other</item>
     </string-array>
 
     <string-array name="transportationvalues">
         <item>None</item>
         <item>Bike</item>
         <item>Car</item>
+        <item>Other</item>
     </string-array>
 
     <string-array name="setupentries">

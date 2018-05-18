@@ -1,5 +1,6 @@
 package com.raffaele.jeanluc.playerlocator;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -39,8 +40,8 @@ public class ChallengeActivity extends AppCompatActivity {
             TextView newview = new TextView(this);
             newview.setClickable(true);
             newview.setTextSize(20);
+            newview.setPadding(0, 15, 0, 15);
             String viewtext;
-
 
 
             if (c.challenger.equals(username))
@@ -59,24 +60,6 @@ public class ChallengeActivity extends AppCompatActivity {
                 newview.setOnClickListener(new ChallengeClickListener(false, c));
 
 
-
-                /*
-                newview.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new AlertDialog.Builder(ChallengeActivity.this)
-                                .setTitle("Title")
-                                .setMessage("Do you want to accept this challenge?" )
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        Toast.makeText(ChallengeActivity.this, "Yaay", Toast.LENGTH_SHORT).show();
-                                    }})
-                                .setNegativeButton(android.R.string.no, null).show();
-                    }
-                });
-            */
             }
 
 
@@ -109,34 +92,40 @@ public class ChallengeActivity extends AppCompatActivity {
         ChallengeInfo challenge;
         Boolean is_challenger;
 
-        public ChallengeClickListener(Boolean is_challenger, ChallengeInfo challenger) {
+        public ChallengeClickListener(Boolean is_challenger, ChallengeInfo challenge) {
             this.is_challenger = is_challenger;
-            this.challenge = challenger;
+            this.challenge = challenge;
         }
 
 
 
 
 
-        private void createDialog(String title, String message)
+        private AlertDialog createDialog(String title, String message)
         {
-            new AlertDialog.Builder(ChallengeActivity.this)
-                    .setTitle("")
-                    .setMessage("")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                AlertDialog alertDialog = new AlertDialog.Builder(ChallengeActivity.this).setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            Toast.makeText(ChallengeActivity.this, "Yaay", Toast.LENGTH_SHORT).show();
-                        }})
-                    .setNegativeButton(android.R.string.no, null).show();
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //Toast.makeText(ChallengeActivity.this, "Yaay", Toast.LENGTH_SHORT).show();
+                    }}) .create();
+                alertDialog.setTitle(title);
+                alertDialog.setMessage(message);
+                alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                return alertDialog;
+
+
         }
+
 
         @Override
         public void onClick(View v)
         {
             String title;
             String message;
+            Boolean pending_reply = false;
+            AlertDialog alertDialog;
+
+            Log.d("challenge_debug", "in on click");
             if (is_challenger)
             {
                 switch (challenge.challenge_status)
@@ -158,8 +147,8 @@ public class ChallengeActivity extends AppCompatActivity {
                         message = "Error";
                         break;
                 }
-
-                createDialog(title, message);
+                alertDialog = createDialog(title, message);
+                alertDialog.show();
             }
 
             else
@@ -175,8 +164,9 @@ public class ChallengeActivity extends AppCompatActivity {
                         message = "You rejected " + challenge.challenger + "'s challenge";
                         break;
                     case PENDING:
-                        title = "Pending";
-                        message = "Waiting on " + challenge.challengee + " to reply";
+                        title = "New Challenge!";
+                        message = challenge.challenger + " has challenged you! (This will share your contact information from settings)";
+                        pending_reply = true;
                         break;
                     default:
                         title = "Error";
@@ -184,12 +174,60 @@ public class ChallengeActivity extends AppCompatActivity {
                         break;
                 }
 
-                createDialog(title, message);
+
+                alertDialog = createDialog(title, message);
+                if (pending_reply) {
+                    alertDialog.setButton(Dialog.BUTTON_POSITIVE,"ACCEPT", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            sendResponse(ACCEPTED, challenge.challenger, challenge.challengee);
+                        }
+                    });
+                    alertDialog.setButton(Dialog.BUTTON_NEGATIVE,"DECLINE", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            sendResponse(REJECTED, challenge.challenger, challenge.challengee);
+                        }
+                    });
+                    alertDialog.setButton(Dialog.BUTTON_NEUTRAL,"CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(ChallengeActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+
+                alertDialog.show();
             }
         }
 
 
+        private String sendResponse(String response, String challenger, String challengee)
+        {
+            String z = "";
+            ConnectionClass connectionClass;
+            connectionClass = new ConnectionClass();
 
+
+            try {
+                Connection conn = connectionClass.CONN();
+
+                if (conn != null) {
+
+
+
+                    String query = "UPDATE Challenges SET challenge_status = '" + response + "' " +
+                            "WHERE challenger = '" + challenger + "' AND challengee = '" + challengee + "'";
+                    Statement stmt = conn.createStatement();
+                    stmt.executeUpdate(query);
+
+                    z = "success";
+                }
+            }
+            catch(Exception ex)
+            {
+                z = "Error getting contact info";
+            }
+            return z;
+        }
 
         private String getContactInfo(String lookup)
         {
@@ -258,14 +296,14 @@ public class ChallengeActivity extends AppCompatActivity {
 
 
                 //Check to see if challenge exists
-                String query = "SELECT * FROM Challenges WHERE challenge = "
-                        + "'" + name + "'" + " OR challengee = " + "'" + name + "'";
+                String query = "SELECT * FROM Challenges WHERE challenger = "
+                        + "'" + name + "'" + " OR challengee = " + "'" + name + "' AND challenge_date Between DATEADD(m, -1, GETDATE()) and GETDATE()";
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(query);
 
                 while(rs.next())
                 {
-                    challenger = rs.getString("challenge");
+                    challenger = rs.getString("challenger");
                     challengee = rs.getString("challengee");
                     challenge_status = rs.getString("challenge_status");
 
@@ -277,7 +315,7 @@ public class ChallengeActivity extends AppCompatActivity {
         }
         catch(Exception ex)
         {
-            Log.d("bio_debug", ex.getMessage());
+            Log.d("challenge_debug", ex.getMessage());
         }
         return challenges;
     }

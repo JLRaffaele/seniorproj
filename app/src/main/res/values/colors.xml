@@ -5,6 +5,6 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="PendingBackground">#FFFF00</color>
-    <color name="RejectedBackground">#80FF00</color>
-    <color name="AcceptedBackground">#FF8000</color>
+    <color name="RejectedBackground">#FF8000</color>
+    <color name="AcceptedBackground">#80FF00</color>
 </resources>

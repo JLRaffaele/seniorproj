@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_challenges:
                 Intent intent2 = new Intent(MainActivity.this, ChallengeActivity.class );
-                intent2.putExtra("usernaem", username);
+                intent2.putExtra("username", username);
                 startActivity(intent2);
             default:
         }
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                     //TODO: major refactoring of this code
 
                     //Check to see if challenge exists
-                    String query = "SELECT challenge,challengee FROM Challenges WHERE challenge= '" + username + "' AND challengee= '" + challengee + "'";
+                    String query = "SELECT challenger,challengee FROM Challenges WHERE challenger= '" + username + "' AND challengee= '" + challengee + "'";
                     Statement stmt = conn.createStatement();
                     ResultSet rs = stmt.executeQuery(query);
 
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                     if (rs.next())
                         validChallenge = false;
 
-                    query = "SELECT challenge,challengee FROM Challenges WHERE challenge= '" + challengee + "' AND challengee= '" + username + "'";
+                    query = "SELECT challenger,challengee FROM Challenges WHERE challenger= '" + challengee + "' AND challengee= '" + username + "'";
                     stmt = conn.createStatement();
                     rs = stmt.executeQuery(query);
 
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (!rs.next() && validChallenge) {
 
-                        query = "INSERT INTO Challenges (challenge, challengee) VALUES " +
+                        query = "INSERT INTO Challenges (challenger, challengee) VALUES " +
                                 "('" + username + "','" + challengee + "');";
 
                         Log.d("challenge_debug", query);
