@@ -10,7 +10,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 
-import com.takisoft.fix.support.v7.preference.EditTextPreference;
 
 
 import android.util.Log;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {

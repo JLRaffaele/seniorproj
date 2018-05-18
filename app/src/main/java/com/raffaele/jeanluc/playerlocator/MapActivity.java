@@ -36,9 +36,11 @@ import java.sql.Statement;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -115,7 +117,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 "Smash setups: " + user.Setups);
         }
 
-        Log.d("maptest" , "In onmapready: username: " + userInfoList.toString());
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, zoom));
         //googleMap.setOnMarkerClickListener(this);
 
@@ -198,9 +199,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             myzip = sharedPref.getString("zipcode_preference", "");
 
-            List<Address> addresses = geocoder.getFromLocationName(myzip, 5);
+            List<Address> addresses = geocoder.getFromLocationName(myzip, 1);
 
-            Log.d("maptest" , "In: getMyLatLng: Address Listing: " + addresses.toString());
+
             if (addresses != null && !addresses.isEmpty())
             {
                 Address address = addresses.get(0);
@@ -262,6 +263,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         @Override
         protected String doInBackground(String... params)
         {
+            Random rand = new Random();
+            Double lat_with_fudge;
+            Double long_with_fudge;
+
             String userZip;
             String userName;
             String skill;
@@ -304,7 +309,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         if (addresses != null && !addresses.isEmpty() && !userName.equals(currentUser))
                         {
                             Address address = addresses.get(0);
-                            LatLng coordinates = new LatLng(address.getLatitude(), address.getLongitude());
+                            lat_with_fudge = address.getLatitude();
+                            long_with_fudge = address.getLongitude();
+
+                            if (rand.nextBoolean())
+                                lat_with_fudge += rand.nextDouble() % 0.05;
+                            else
+                                lat_with_fudge -= rand.nextDouble() % 0.05;
+
+                            if (rand.nextBoolean())
+                                long_with_fudge += rand.nextDouble() % 0.05;
+                            else
+                                long_with_fudge -= rand.nextDouble() % 0.05;
+
+
+                            Log.d("maptest", Double.toString(lat_with_fudge));
+                            Log.d("maptest", Double.toString(long_with_fudge));
+
+                            LatLng coordinates = new LatLng(lat_with_fudge, long_with_fudge);
 
                             //Adding to userInfoList - skill values gets string from array resources
                             UserInfo info = new UserInfo(coordinates, userName, transportation, setups, skillValues.getString(Integer.parseInt(skill)));
@@ -314,12 +336,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     }
                     z = "Got map data";
                     connectionSuccess= true;
+                    //for (UserInfo u : userInfoList)
+                     //   Log.d("maptest", u.LatLng.toString());
                 }
             }
 
             catch(Exception ex)
             {
-
+                Log.d("maptest", "exception map");
+                Log.d("maptest", ex.getMessage());
                 z = "Exceptions";
             }
 
