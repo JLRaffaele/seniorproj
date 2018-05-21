@@ -112,7 +112,7 @@ public class RegisterActivity extends Activity {
                 try {
                     Connection conn = connectionClass.CONN();
                     if (conn == null)
-                        z = "Error in connection with SQL Server";
+                        z = "Error in connection with Server";
 
                     else {
                         //Check to see if name is already taken
@@ -126,10 +126,9 @@ public class RegisterActivity extends Activity {
                             String hashedpass = generateStoringPasswordHash(password.trim());
 
                             query = "insert into Users (username, pass) " +
-                                    "values ('" + userid.trim() + "', '" + hashedpass + "') " +
-                                    "select * from Users where username='" + userid + "'";
+                                    "values ('" + userid.trim() + "', '" + hashedpass + "') ";
                             stmt = conn.createStatement();
-                            rs = stmt.executeQuery(query);
+                            stmt.executeUpdate(query);
 
                             z = "Registration successful";
                             isSuccess = true;
@@ -137,8 +136,8 @@ public class RegisterActivity extends Activity {
                     }
                 } catch (Exception ex) {
                     isSuccess = false;
-                    Log.d("sql test" , ex.getMessage());
-                    z = "Exceptions";
+                    Log.e("register_error" , ex.getMessage());
+                    z = "Error";
                 }
 
             }

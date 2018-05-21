@@ -57,6 +57,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Boolean connectionSuccess;
     final Geocoder geocoder = new Geocoder(this);
     String USER_INFOBOX_TITLE = "Your location!";
+    int ZOOM_AMOUNT = 10;
     String currentUser;
 
 
@@ -75,8 +76,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         catch(InterruptedException | ExecutionException e)
         {
-            Log.e("mapdata", "Error obtaining map data");
-            //Toast.makeText(this, "Error obtaining map data", Toast.LENGTH_SHORT);
+            Log.e("map_error", "Error obtaining map data");
+            Toast.makeText(this, "Error obtaining map data", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -100,7 +101,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         googleMap.setOnInfoWindowClickListener(this);
-        float zoom = 10;
+        float zoom = ZOOM_AMOUNT;
         googleMap.addMarker(new MarkerOptions().position(myLatLng)
                 .title(USER_INFOBOX_TITLE));
 
@@ -118,7 +119,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, zoom));
-        //googleMap.setOnMarkerClickListener(this);
 
     }
 
@@ -219,7 +219,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         catch (IOException e)
         {
-            Log.e("mapError", "error in getting latitude and longitude");
+            Log.e("map_error", "error in getting latitude and longitude");
         }
 
         return myLatLng;
@@ -233,15 +233,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         String Transportation;
         String Setups;
         String Skill;
-
-        public UserInfo()
-        {
-            UserName = null;
-            LatLng = null;
-            Transportation = null;
-            Setups = null;
-            Skill = null;
-        }
 
         public UserInfo(LatLng latLng, String userName, String transportation, String setups, String skill)
         {
@@ -273,7 +264,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             String transportation;
             String setups;
             connectionSuccess = false;
-            Boolean validResult = false;
             Resources res = getResources();
             TypedArray skillValues = res.obtainTypedArray(R.array.skillentries);
 
@@ -322,10 +312,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             else
                                 long_with_fudge -= rand.nextDouble() % 0.05;
 
-
-                            Log.d("maptest", Double.toString(lat_with_fudge));
-                            Log.d("maptest", Double.toString(long_with_fudge));
-
                             LatLng coordinates = new LatLng(lat_with_fudge, long_with_fudge);
 
                             //Adding to userInfoList - skill values gets string from array resources
@@ -336,15 +322,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     }
                     z = "Got map data";
                     connectionSuccess= true;
-                    //for (UserInfo u : userInfoList)
-                     //   Log.d("maptest", u.LatLng.toString());
+
                 }
             }
 
             catch(Exception ex)
             {
-                Log.d("maptest", "exception map");
-                Log.d("maptest", ex.getMessage());
+                Log.e("map_error", ex.getMessage());
                 z = "Exceptions";
             }
 

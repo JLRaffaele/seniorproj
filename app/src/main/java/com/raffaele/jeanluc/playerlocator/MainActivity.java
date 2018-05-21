@@ -160,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
 
     public String LoadBio(String name)
     {
-        Log.d("bio_debug", "here");
         String bio_text = "";
         ConnectionClass connectionClass;
         connectionClass = new ConnectionClass();
@@ -184,16 +183,10 @@ public class MainActivity extends AppCompatActivity {
         }
         catch(Exception ex)
         {
-            Log.d("bio_debug", ex.getMessage());
+            Log.e("bio_error", ex.getMessage());
         }
         return bio_text;
     }
-
-
-
-
-
-
 
 
 
@@ -261,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
             catch (Exception ex)
             {
                 z = "Error sending challenge";
-                Log.d("challenge_debug", ex.getMessage());
+                Log.e("challenge_error", ex.getMessage());
             }
 
             return z;

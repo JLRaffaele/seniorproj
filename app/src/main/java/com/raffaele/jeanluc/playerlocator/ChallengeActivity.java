@@ -85,10 +85,6 @@ public class ChallengeActivity extends AppCompatActivity {
     public class ChallengeClickListener implements View.OnClickListener
     {
 
-        //String title;
-        //String message;
-        //String status;
-
         ChallengeInfo challenge;
         Boolean is_challenger;
 
@@ -96,7 +92,6 @@ public class ChallengeActivity extends AppCompatActivity {
             this.is_challenger = is_challenger;
             this.challenge = challenge;
         }
-
 
 
 
@@ -315,7 +310,7 @@ public class ChallengeActivity extends AppCompatActivity {
         }
         catch(Exception ex)
         {
-            Log.d("challenge_debug", ex.getMessage());
+            Log.e("challenge_error", ex.getMessage());
         }
         return challenges;
     }

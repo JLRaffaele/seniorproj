@@ -33,7 +33,7 @@
         </activity>
         <activity
             android:name=".MapActivity"
-            android:label="MapActivity"
+            android:label="Frame1: Find a new opponent!"
             android:noHistory="true"></activity>
         <activity
             android:name=".RegisterActivity"

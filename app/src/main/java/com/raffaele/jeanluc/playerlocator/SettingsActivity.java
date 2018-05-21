@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                         DoPreferenceUpdate doPreferenceUpdate = new DoPreferenceUpdate();
                         doPreferenceUpdate.execute("");
 
-                        //dont leave settings until they are valid
+                        //don't leave settings until they are valid
 
                         NavUtils.navigateUpFromSameTask(this);
                     }
@@ -167,8 +167,8 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             catch(Exception ex)
             {
                 isSuccess = false;
-                Log.d("preftest", ex.getMessage());
-                z = "Exceptions";
+                Log.e("settings_error", ex.getMessage());
+                z = "Error";
             }
             return z;
         }

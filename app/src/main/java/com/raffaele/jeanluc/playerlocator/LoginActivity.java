@@ -119,7 +119,7 @@ public class LoginActivity extends Activity {
                     Connection conn = connectionClass.CONN();
 
                     if (conn == null)
-                        z = "Error in connection with SQL Server";
+                        z = "Error in connection with Server";
 
                     else
                     {
@@ -145,7 +145,7 @@ public class LoginActivity extends Activity {
                 catch(Exception ex)
                 {
                     isSuccess = false;
-                    Log.d("logintest", ex.getMessage());
+                    Log.e("login_error", ex.getMessage());
                     z = "Invalid username/password";
                 }
             }
